@@ -1,12 +1,12 @@
 package com.github.pabloo99.jdbc;
 
-import lombok.extern.slf4j.Slf4j;
+import org.apache.log4j.Logger;
 
-@Slf4j
 public class HelloJDBC {
 
     public static void main(String[] args) {
-        System.out.println("Hello JDBC !");
-    }
+        Logger logger = Logger.getLogger(HelloJDBC.class);
 
+        logger.info("Hello JDBC!");
+    }
 }
