@@ -1,25 +1,29 @@
 package com.github.pabloo99.jdbc.connection;
 
+import com.github.pabloo99.jdbc.properties.PropertiesReader;
 import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
-public class DBConnector {
+public class MySqlConnector implements CustomConnection {
 
-    private static final Logger logger = Logger.getLogger(DBConnector.class);
+    private static final Logger logger = Logger.getLogger(MySqlConnector.class);
 
-    private static final String DATABASE_URL = "jdbc:mysql://localhost:3306/hr?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-    private static final String USERNAME = "pmazur";
-    private static final String PASSWORD = "pmazur";
+    private Properties properties;
 
-    public static Connection getMySqlConnection() {
+    public MySqlConnector() {
+        PropertiesReader propertiesReader = new PropertiesReader();
+        this.properties = propertiesReader.loadFromFile("db.properties");
+    }
 
+    public Connection getConnection() {
         Connection connection = null;
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName(properties.getProperty("MYSQL_DRIVER_CLASS"));
         } catch (ClassNotFoundException e) {
             logger.error("Missing MySQL driver");
             logger.error(e.getMessage(), e);
@@ -28,7 +32,11 @@ public class DBConnector {
         logger.info("MySQL JDBC Driver Registered!");
 
         try {
-            connection = DriverManager.getConnection(DATABASE_URL, USERNAME, PASSWORD);
+            connection = DriverManager.getConnection(
+                    properties.getProperty("MYSQL_URL"),
+                    properties.getProperty("MYSQL_USERNAME"),
+                    properties.getProperty("MYSQL_PASSWORD"));
+
             connection.setAutoCommit(true);
 
             if (connection != null) {

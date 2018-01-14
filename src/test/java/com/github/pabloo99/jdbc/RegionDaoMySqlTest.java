@@ -1,5 +1,7 @@
 package com.github.pabloo99.jdbc;
 
+import com.github.pabloo99.jdbc.connection.CustomConnection;
+import com.github.pabloo99.jdbc.connection.MySqlConnector;
 import com.github.pabloo99.jdbc.dao.RegionsDAO;
 import com.github.pabloo99.jdbc.entity.Region;
 import org.apache.log4j.Logger;
@@ -11,15 +13,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RegionDAOTest {
+public class RegionDaoMySqlTest {
 
-    private static final Logger logger = Logger.getLogger(RegionDAOTest.class);
+    private static final Logger logger = Logger.getLogger(RegionDaoMySqlTest.class);
 
     private RegionsDAO regionsDAO;
+    private CustomConnection mySqlConnection;
 
     @BeforeClass
     public void setUp() {
-        regionsDAO = new RegionsDAO();
+        mySqlConnection = new MySqlConnector();
+        regionsDAO = new RegionsDAO(mySqlConnection);
     }
 
     @Test

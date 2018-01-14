@@ -1,7 +1,7 @@
 package com.github.pabloo99.jdbc;
 
 import com.github.pabloo99.jdbc.connection.CustomConnection;
-import com.github.pabloo99.jdbc.connection.H2Connector;
+import com.github.pabloo99.jdbc.connection.OracleConnector;
 import com.github.pabloo99.jdbc.dao.RegionsDAO;
 import com.github.pabloo99.jdbc.entity.Region;
 import org.apache.log4j.Logger;
@@ -9,30 +9,21 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RegionDaoH2Test {
+public class RegionDaoOracleTest {
 
-    private static final Logger logger = Logger.getLogger(RegionDaoH2Test.class);
+    private static final Logger logger = Logger.getLogger(RegionDaoOracleTest.class);
 
     private RegionsDAO regionsDAO;
-    private CustomConnection h2Connection;
+    private CustomConnection oracleConnection;
 
     @BeforeClass
     public void setUp() {
-        h2Connection = new H2Connector();
-        regionsDAO = new RegionsDAO(h2Connection);
-
-        try {
-            PreparedStatement statement =
-                    h2Connection.getConnection().prepareStatement("runscript from 'classpath:/hr.sql'");
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-        }
+        oracleConnection = new OracleConnector();
+        regionsDAO = new RegionsDAO(oracleConnection);
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.github.pabloo99.jdbc.dao;
 
-import com.github.pabloo99.jdbc.connection.DBConnector;
+import com.github.pabloo99.jdbc.connection.CustomConnection;
+import com.github.pabloo99.jdbc.connection.MySqlConnector;
 import com.github.pabloo99.jdbc.entity.Region;
 import org.apache.log4j.Logger;
 
@@ -12,6 +13,12 @@ public class RegionsDAO {
 
     private static final Logger logger = Logger.getLogger(RegionsDAO.class);
 
+    private final CustomConnection connector;
+
+    public RegionsDAO(CustomConnection connector) {
+        this.connector = connector;
+    }
+
     public Region findById(int regionId) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -20,7 +27,7 @@ public class RegionsDAO {
                 "WHERE REGION_ID = ?";
 
         try {
-            connection = DBConnector.getMySqlConnection();
+            connection = connector.getConnection();
 
             statement = connection.prepareStatement(query);
             statement.setInt(1, regionId);
@@ -62,7 +69,7 @@ public class RegionsDAO {
         List<Region> regions = new ArrayList<>();
 
         try {
-            connection = DBConnector.getMySqlConnection();
+            connection = connector.getConnection();
             statement = connection.createStatement();
 
             logger.info(query);
@@ -101,7 +108,7 @@ public class RegionsDAO {
                 "VALUES (?, ?)";
 
         try {
-            connection = DBConnector.getMySqlConnection();
+            connection = connector.getConnection();
 
             statement = connection.prepareStatement(query);
             statement.setInt(1, region.getId());
@@ -130,7 +137,7 @@ public class RegionsDAO {
 
         String query = "DELETE FROM REGIONS WHERE REGION_ID = ? ";
         try {
-            connection = DBConnector.getMySqlConnection();
+            connection = connector.getConnection();
 
             statement = connection.prepareStatement(query);
             statement.setInt(1, regionId);
@@ -161,7 +168,7 @@ public class RegionsDAO {
                 "SET REGION_NAME = ? WHERE REGION_ID = ?";
 
         try {
-            connection = DBConnector.getMySqlConnection();
+            connection = connector.getConnection();
 
             statement = connection.prepareStatement(query);
             statement.setString(1, region.getName());

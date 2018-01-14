@@ -24,9 +24,9 @@
 
     <dependencies>
         <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>1.16.18</version>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.18</version>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
@@ -54,6 +54,11 @@
             <artifactId>h2</artifactId>
             <version>1.4.196</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version>11.2.0</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
