@@ -19,12 +19,57 @@ public class RegionsDAO {
         this.connector = connector;
     }
 
+
+    public List<Region> findByName(String name) throws SQLException {
+        Connection connection = null;
+        Statement statement = null;
+
+        String query = "SELECT region_id, region_name FROM regions " +
+                "WHERE region_name = " + name;
+
+        try {
+            connection = connector.getConnection();
+
+            statement = connection.createStatement();
+
+            logger.info(query);
+
+            // execute select SQL stetement
+            ResultSet rs = statement.executeQuery(query);
+
+            List<Region> result = new ArrayList<>();
+
+            while (rs.next()) {
+                int id = rs.getInt("region_id");
+                String regionName = rs.getString("region_name");
+
+                result.add(new Region(id, regionName));
+            }
+
+            rs.close();
+
+            return result;
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
+        } finally {
+            if (statement != null) {
+                statement.close();
+            }
+
+            if (connection != null) {
+                connection.close();
+            }
+        }
+
+        return null;
+    }
+
     public Region findById(int regionId) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
 
-        String query = "SELECT REGION_ID, REGION_NAME FROM REGIONS " +
-                "WHERE REGION_ID = ?";
+        String query = "SELECT region_id, region_name FROM regions " +
+                "WHERE region_id = ?";
 
         try {
             connection = connector.getConnection();
@@ -64,7 +109,7 @@ public class RegionsDAO {
         Connection connection = null;
         Statement statement = null;
 
-        String query = "SELECT * FROM REGIONS ";
+        String query = "SELECT * FROM regions ";
 
         List<Region> regions = new ArrayList<>();
 
@@ -104,7 +149,7 @@ public class RegionsDAO {
         Connection connection = null;
         PreparedStatement statement = null;
 
-        String query = "INSERT INTO REGIONS(REGION_ID, REGION_NAME)  " +
+        String query = "INSERT INTO regions(region_id, region_name)  " +
                 "VALUES (?, ?)";
 
         try {
@@ -135,7 +180,7 @@ public class RegionsDAO {
         Connection connection = null;
         PreparedStatement statement = null;
 
-        String query = "DELETE FROM REGIONS WHERE REGION_ID = ? ";
+        String query = "DELETE FROM regions WHERE region_id = ? ";
         try {
             connection = connector.getConnection();
 
@@ -164,8 +209,8 @@ public class RegionsDAO {
         Connection connection = null;
         PreparedStatement statement = null;
 
-        String query = "UPDATE REGIONS " +
-                "SET REGION_NAME = ? WHERE REGION_ID = ?";
+        String query = "UPDATE regions " +
+                "SET region_name = ? WHERE region_id = ?";
 
         try {
             connection = connector.getConnection();

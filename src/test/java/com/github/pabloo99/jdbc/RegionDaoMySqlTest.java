@@ -95,4 +95,19 @@ public class RegionDaoMySqlTest {
 
         Assert.assertEquals(regions.size(), 4);
     }
+
+    @Test()
+    public void shouldFindMoreThanOneRegion() {
+        List<Region> regions = new ArrayList<>();
+
+        try {
+            regions.addAll(regionsDAO.findByName("'Europe' OR 1 = 1"));
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
+        }
+
+        logger.info("Regions count: " + regions.size());
+
+        Assert.assertTrue(regions.size() > 1);
+    }
 }
